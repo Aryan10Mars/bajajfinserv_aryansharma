@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFHL API Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #response {
+            white-space: pre-wrap;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>BFHL API Test</h1>
+    
+    <h2>POST Request</h2>
+    <form id="postForm">
+        <input type="text" id="postInput" placeholder="Enter data (comma-separated values)" required>
+        <button type="submit">Send POST Request</button>
+    </form>
+    
+    <h2>GET Request</h2>
+    <button id="getButton">Send GET Request</button>
+    
+    <h2>Response:</h2>
+    <pre id="response"></pre>
+
+    <script>
+        document.getElementById('postForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('postInput').value;
+            const data = input.split(',').map(item => item.trim());
+            
+            try {
+                const response = await axios.post('/bfhl', { data });
+                document.getElementById('response').textContent = JSON.stringify(response.data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = 'Error: ' + error.message;
+            }
+        });
+
+        document.getElementById('getButton').addEventListener('click', async () => {
+            try {
+                const response = await axios.get('/bfhl');
+                document.getElementById('response').textContent = JSON.stringify(response.data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
